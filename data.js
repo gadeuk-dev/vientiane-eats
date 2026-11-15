@@ -165,4 +165,4 @@ window.PLACES = [
  reasons:['평점 4.3, 리뷰 180여 개','빵과 커피를 함께 즐기기 좋은 베이커리 카페','관광지에서 살짝 벗어나 붐비지 않아요'],
  tags:['베이커리','커피']}
 ];
-window.PLACES.forEach(p => { p.img = 'photos/' + p.id + '.jpg'; });
+window.PLACES.forEach(p => { p.img = 'photos/' + p.id + '.jpg?v=3'; });
