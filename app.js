@@ -6,7 +6,45 @@ const CENTER = [17.9667, 102.6100];
 const FARE_BASE = 20000, FARE_KM = 9000;
 const KIP_PER_KRW = 15.4; // 1원 ≈ 15.4킵 (대략)
 const $ = s => document.querySelector(s);
-const state = { tab:'r', filter:'전체', sort:'rank', me:null, map:null, markers:{}, meMarker:null };
+const state = { tab:'r', filter:'전체', sort:'rank', me:null, map:null, markers:{}, meMarker:null, mapF:'all' };
+const STAR = '★ 별표';
+
+/* ---------- 별표 (내 기기에 저장) + 추천 링크 (?picks=) ---------- */
+const VALID = new Set(P.map(p=>p.id));
+const stars = new Set((()=>{ try{ return JSON.parse(localStorage.getItem('vte_stars')||'[]'); }catch(e){ return []; } })().filter(id=>VALID.has(id)));
+const qs = new URLSearchParams(location.search);
+const shared = new Set((qs.get('picks')||'').split(',').filter(id=>VALID.has(id)));
+const sharedFrom = (qs.get('from')||'').slice(0,20);
+function saveStars(){ try{ localStorage.setItem('vte_stars', JSON.stringify([...stars])); }catch(e){} }
+const isPick = id => stars.has(id) || shared.has(id);
+function toggleStar(id){
+  if(stars.has(id)){ stars.delete(id); toast('별표를 뺐어요'); }
+  else { stars.add(id); toast('★ 내 추천에 담았어요'); }
+  saveStars(); refreshStars(id);
+}
+function refreshStars(id){
+  renderFilters(); renderList(); renderStarBar(); repaintPins();
+  const sb=document.querySelector('.sh-star'); if(sb && sb.dataset.star===id) paintSheetStar(sb,id);
+}
+function paintSheetStar(b,id){ const on=stars.has(id); b.setAttribute('aria-pressed',on); b.innerHTML = on ? '★ 내 추천에 담김' : '☆ 내 추천에 담기'; }
+function shareUrl(name){
+  const u = new URL(location.origin + location.pathname);
+  u.searchParams.set('picks', [...stars].join(','));
+  if(name) u.searchParams.set('from', name);
+  return u.toString();
+}
+function renderStarBar(){
+  const bar=$('#starBar'); const n=stars.size;
+  let html='';
+  if(shared.size){
+    const inMine=[...shared].every(id=>stars.has(id));
+    html += `<div class="sb-row sb-friend"><span><b>${sharedFrom?esc(sharedFrom)+'님':'친구'}이 추천한 ${shared.size}곳</b>에 "친구 추천" 표시가 붙어 있어요.</span>
+      <span class="sb-btns"><button class="chip" type="button" data-act="showpicks">추천만 보기</button>${inMine?'':`<button class="chip" type="button" data-act="adopt">내 별표에 담기</button>`}</span></div>`;
+  }
+  html += n ? `<div class="sb-row"><span><b>★ 내 별표 ${n}곳</b> · 이 기기에 저장돼요</span><span class="sb-btns"><button class="chip" type="button" data-act="showpicks">별표만 보기</button><button class="chip pri" type="button" data-act="share">추천 링크 보내기</button></span></div>`
+    : (shared.size ? '' : `<div class="sb-row sb-hint">사진 오른쪽 위 <b>☆</b>를 눌러 추천할 곳에 별표하고, 링크로 친구에게 보내 보세요.</div>`);
+  bar.innerHTML = html;
+}
 
 /* ---------- 거리·요금 ---------- */
 function hav(a,b){const R=6371,t=Math.PI/180;const dLa=(b[0]-a[0])*t,dLo=(b[1]-a[1])*t;const x=Math.sin(dLa/2)**2+Math.cos(a[0]*t)*Math.cos(b[0]*t)*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
@@ -28,7 +66,8 @@ const mins = m => m>=60 ? Math.floor(m/60)+'시간 '+(m%60)+'분' : m+'분';
 /* ---------- 목록 ---------- */
 function items(){
   let a = P.filter(p => p.type===state.tab);
-  if(state.filter!=='전체') a = a.filter(p => p.group===state.filter);
+  if(state.filter===STAR) a = a.filter(p => isPick(p.id));
+  else if(state.filter!=='전체') a = a.filter(p => p.group===state.filter);
   if(state.sort==='near' && state.me) a = a.slice().sort((x,y)=>hav(state.me,[x.lat,x.lng])-hav(state.me,[y.lat,y.lng]));
   else a = a.slice().sort((x,y)=>x.rank-y.rank);
   return a;
@@ -39,22 +78,27 @@ function photo(p, eager){
 }
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function renderFilters(){
-  const groups = ['전체', ...new Set(P.filter(p=>p.type===state.tab).map(p=>p.group))];
-  const html = groups.map(g=>`<button class="chip" type="button" aria-pressed="${g===state.filter}" data-g="${esc(g)}">${esc(g)}</button>`).join('');
+  const nPick = P.filter(p=>p.type===state.tab && isPick(p.id)).length;
+  const groups = ['전체', ...(nPick?[STAR]:[]), ...new Set(P.filter(p=>p.type===state.tab).map(p=>p.group))];
+  if(state.filter===STAR && !nPick) state.filter='전체';
+  const html = groups.map(g=>`<button class="chip${g===STAR?' chip-star':''}" type="button" aria-pressed="${g===state.filter}" data-g="${esc(g)}">${esc(g===STAR?STAR+' '+nPick:g)}</button>`).join('');
   $('#filters').innerHTML = html;
 }
 function renderList(){
   const a = items();
   $('#secTitle').textContent = (state.tab==='r'?'식당 ':'카페 ') + P.filter(p=>p.type===state.tab).length;
+  if(!a.length){ $('#list').innerHTML = `<p class="empty">아직 이 탭에 별표한 곳이 없어요. 사진 오른쪽 위 ☆를 눌러 보세요.</p>`; return; }
   $('#list').innerHTML = a.map((p,i)=>{
-    const t = trip(p);
-    return `<button class="card" type="button" data-id="${p.id}">
-      ${photo(p, i<2)}<span class="rank">${state.tab==='r'?'식당':'카페'} ${String(p.rank).padStart(2,'0')}</span>${t?`<span class="dist">${km(t.road)} · 택시 ${mins(t.carMin)}</span>`:''}</div>
+    const t = trip(p); const mine = stars.has(p.id), fr = shared.has(p.id);
+    const badge = mine ? '<span class="pick-badge">★ 내 추천</span>' : fr ? '<span class="pick-badge fr">친구 추천</span>' : '';
+    return `<div class="cardw${mine||fr?' picked':''}"><button class="card" type="button" data-id="${p.id}">
+      ${photo(p, i<2)}<span class="rank">${state.tab==='r'?'식당':'카페'} ${String(p.rank).padStart(2,'0')}</span>${badge}${t?`<span class="dist">${km(t.road)} · 택시 ${mins(t.carMin)}</span>`:''}</div>
       <div class="card-b">
         <div class="card-t"><h3>${esc(p.name)}</h3><span class="stars">★ ${p.rating.toFixed(1)} <small>(${kip(p.count)})</small></span></div>
         <div class="meta">${esc(p.cat)}${p.price?' · '+esc(p.price):''}${p.area?' · '+esc(p.area):''}</div>
         <div class="why">${esc(p.oneLine)}</div>
-      </div></button>`;
+      </div></button>
+      <button class="star-btn" type="button" data-star="${p.id}" aria-pressed="${mine}" aria-label="${esc(p.name)} ${mine?'별표 빼기':'별표하기'}">${mine?'★':'☆'}</button></div>`;
   }).join('');
 }
 
@@ -85,6 +129,8 @@ function openSheet(id){
         <div class="eyebrow" style="color:var(--saffron)">${p.type==='r'?'식당':'카페'} ${String(p.rank).padStart(2,'0')} · ${esc(p.cat)}</div>
         <h2 id="shName" style="margin-top:6px">${esc(p.name)}</h2>
         <div class="sh-sub"><span class="stars">★ ${p.rating.toFixed(1)}</span> 구글 리뷰 ${kip(p.count)}개${p.price?' · '+esc(p.price):''}</div>
+        ${shared.has(p.id)?`<div class="sh-friend">${sharedFrom?esc(sharedFrom)+'님':'친구'}이 추천한 곳이에요</div>`:''}
+        <button class="btn sh-star" type="button" data-star="${p.id}"></button>
       </div>
       <ul class="reasons">${p.reasons.map(r=>`<li>${esc(r)}</li>`).join('')}</ul>
       ${p.tags&&p.tags.length?`<div class="tags">${p.tags.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>`:''}
@@ -101,9 +147,43 @@ function openSheet(id){
         ${p.tip?`<div><dt>팁</dt><dd>${esc(p.tip)}</dd></div>`:''}
       </dl>
     </div>`;
+  paintSheetStar($('.sh-star'), p.id);
+  showSheet();
+  try{ history.replaceState(null,'',location.search+'#'+p.id); }catch(e){}
+}
+function showSheet(){
   const sh = $('#sheet'); sh.hidden = false; sh.scrollTop = 0;
   requestAnimationFrame(()=>{ sh.classList.add('show'); $('#scrim').classList.add('show'); });
-  try{ history.replaceState(null,'','#'+p.id); }catch(e){}
+}
+/* 추천 링크 보내기 */
+function openShare(){
+  if(!stars.size){ toast('먼저 ☆를 눌러 추천할 곳을 골라 주세요'); return; }
+  let name=''; try{ name=localStorage.getItem('vte_name')||''; }catch(e){}
+  const list=P.filter(p=>stars.has(p.id));
+  $('#shBody').innerHTML = `<div class="sh-b" style="padding-top:28px">
+    <div><div class="eyebrow" style="color:var(--saffron)">추천 링크 보내기</div><h2 id="shName" style="margin-top:6px">내 추천 ${list.length}곳</h2>
+    <div class="sh-sub">링크를 받은 친구는 이 ${list.length}곳에 "친구 추천" 표시가 붙은 화면을 보게 돼요.</div></div>
+    <ul class="pick-list">${list.map(p=>`<li><span>${p.type==='r'?'식당':'카페'} · <b>${esc(p.name)}</b></span><button class="tag" type="button" data-star="${p.id}">빼기</button></li>`).join('')}</ul>
+    <label class="field">보내는 사람 이름 (선택)<input id="fromName" type="text" maxlength="20" placeholder="예: 민수" value="${esc(name)}"></label>
+    <div class="trip-cta"><button class="btn pri wide" type="button" data-act="doshare">카톡·메시지로 보내기</button>
+    <button class="btn wide" type="button" data-act="copylink">링크만 복사</button></div>
+    <p class="trip-note" id="shareOut" style="word-break:break-all"></p></div>`;
+  showSheet();
+}
+function currentShareUrl(){
+  const n=($('#fromName')?.value||'').trim(); try{ localStorage.setItem('vte_name',n); }catch(e){}
+  return shareUrl(n);
+}
+async function doShare(){
+  const url=currentShareUrl(); const n=($('#fromName')?.value||'').trim();
+  const text=`${n?n+'의 ':''}비엔티안 추천 맛집 ${stars.size}곳`;
+  if(navigator.share){ try{ await navigator.share({title:text, text, url}); return; }catch(e){ if(e&&e.name==='AbortError') return; } }
+  copyLink(url);
+}
+function copyLink(url){
+  url = url || currentShareUrl();
+  $('#shareOut').textContent = url;
+  (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast('링크를 복사했어요. 카톡에 붙여넣기 하세요')).catch(()=>toast('아래 링크를 길게 눌러 복사하세요'));
 }
 function tripAdvice(t){
   if(t.road < 0.9) return '가까워요. 걸어가도 충분합니다. 낮 12~4시엔 햇볕이 강하니 그늘 길로.';
@@ -113,7 +193,7 @@ function tripAdvice(t){
 function closeSheet(){
   const sh=$('#sheet'); sh.classList.remove('show'); $('#scrim').classList.remove('show');
   setTimeout(()=>{ if(!sh.classList.contains('show')) sh.hidden=true; },300);
-  try{ history.replaceState(null,'',location.pathname); }catch(e){}
+  try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
 }
 
 /* ---------- 지도 ---------- */
@@ -124,17 +204,31 @@ function ensureMap(){
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19, subdomains:'abcd', attribution:'© OpenStreetMap · © CARTO'}).addTo(m);
   state.map = m;
   P.forEach(p=>{
-    const icon = L.divIcon({className:'', html:`<div class="pin ${p.type}"><span>${p.rank}</span></div>`, iconSize:[30,30], iconAnchor:[15,30]});
-    const mk = L.marker([p.lat,p.lng],{icon, title:p.name}).addTo(m);
+    const mk = L.marker([p.lat,p.lng],{icon:pinIcon(p), title:p.name}).addTo(m);
     mk.bindTooltip(`${p.name} ★${p.rating.toFixed(1)}`,{direction:'top', offset:[0,-28]});
     mk.on('click',()=>openSheet(p.id));
     state.markers[p.id]=mk;
   });
-  $('#mapFilters').innerHTML = [['all','전체 40'],['r','식당만'],['c','카페만']].map(([k,l],i)=>`<button class="chip" type="button" data-mf="${k}" aria-pressed="${i===0}">${l}</button>`).join('') + `<button class="chip" type="button" data-act="loc">내 위치</button>`;
+  renderMapFilters();
   drawMe();
 }
+function pinIcon(p){
+  const pk=isPick(p.id);
+  return L.divIcon({className:'', html:`<div class="pin ${p.type}${pk?' pk':''}"><span>${pk?'★':p.rank}</span></div>`, iconSize:[30,30], iconAnchor:[15,30]});
+}
+function repaintPins(){
+  if(!state.map) return;
+  P.forEach(p=>{ const mk=state.markers[p.id]; mk.setIcon(pinIcon(p)); mk.setZIndexOffset(isPick(p.id)?500:0); });
+  renderMapFilters(); mapFilter(state.mapF);
+}
+function renderMapFilters(){
+  const n=P.filter(p=>isPick(p.id)).length;
+  if(state.mapF==='star' && !n) state.mapF='all';
+  $('#mapFilters').innerHTML = [['all','전체 40'],['r','식당만'],['c','카페만'],...(n?[['star','★ 별표 '+n]]:[])].map(([k,l])=>`<button class="chip${k==='star'?' chip-star':''}" type="button" data-mf="${k}" aria-pressed="${k===state.mapF}">${l}</button>`).join('') + `<button class="chip" type="button" data-act="loc">내 위치</button>`;
+}
 function mapFilter(k){
-  P.forEach(p=>{ const mk=state.markers[p.id]; const show = k==='all'||p.type===k; if(show) mk.addTo(state.map); else mk.remove(); });
+  state.mapF=k;
+  P.forEach(p=>{ const mk=state.markers[p.id]; const show = k==='all'||(k==='star'?isPick(p.id):p.type===k); if(show) mk.addTo(state.map); else mk.remove(); });
   document.querySelectorAll('[data-mf]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.mf===k));
 }
 function drawMe(){
@@ -231,6 +325,13 @@ let toastT; function toast(s){const t=$('#toast');t.textContent=s;t.classList.ad
 
 /* ---------- 이벤트 ---------- */
 document.addEventListener('click',e=>{
+  const st=e.target.closest('[data-star]'); if(st){ e.preventDefault(); toggleStar(st.dataset.star); if(st.closest('.pick-list')){ stars.size?openShare():closeSheet(); } return; }
+  const act=e.target.closest('[data-act]')?.dataset.act;
+  if(act==='share'){ openShare(); return; }
+  if(act==='doshare'){ doShare(); return; }
+  if(act==='copylink'){ copyLink(); return; }
+  if(act==='showpicks'){ state.filter=STAR; if(!P.some(p=>p.type===state.tab&&isPick(p.id))) setTab(state.tab==='r'?'c':'r'); state.filter=STAR; renderFilters(); renderList(); $('#listView').scrollIntoView({behavior:'smooth'}); return; }
+  if(act==='adopt'){ shared.forEach(id=>stars.add(id)); saveStars(); refreshStars(); toast(`${shared.size}곳을 내 별표에 담았어요`); return; }
   const card=e.target.closest('.card'); if(card){ openSheet(card.dataset.id); return; }
   const tab=e.target.closest('.tab'); if(tab){ setTab(tab.dataset.tab); return; }
   const chip=e.target.closest('[data-g]'); if(chip){ state.filter=chip.dataset.g; renderFilters(); renderList(); return; }
@@ -250,6 +351,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
   sh.addEventListener('touchend',e=>{ if(y0===null) return; const dy=e.changedTouches[0].clientY-y0; sh.style.transform=''; y0=null; if(dy>110) closeSheet(); });
 })();
 
-renderFilters(); renderList(); weather(); tick(); setInterval(tick, 30000);
+if(shared.size){ if(!P.some(p=>p.type==='r'&&shared.has(p.id))){ state.tab='c'; document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected', b.dataset.tab==='c')); } state.filter=STAR; }
+renderStarBar(); renderFilters(); renderList(); weather(); tick(); setInterval(tick, 30000);
 if(location.hash.length>1 && P.some(p=>p.id===location.hash.slice(1))) openSheet(location.hash.slice(1));
 })();
