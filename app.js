@@ -281,12 +281,12 @@ async function weatherWttr(){
   const code=wttrCode(c.weatherCode); const w=WMO[code]||['—',''];
   $('#wxTemp').textContent=c.temp_C+'°';
   $('#wxDesc').textContent=`${w[1]} ${w[0]} · 체감 ${c.FeelsLikeC}°`;
-  $('#wxMeta').innerHTML=`현지 <span id="clock"></span> · 습도 ${c.humidity}% · 최고 ${day.maxtempC}° / 최저 ${day.mintempC}° · 일몰 ${to24(day.astronomy[0].sunset)}`;
+  $('#wxMeta').innerHTML=`현지 <span id="clock"></span> · 습도 ${+c.humidity}% · 최고 ${+day.maxtempC}° / 최저 ${+day.mintempC}° · 일몰 ${esc(to24(day.astronomy[0].sunset))}`;
   tick();
   const nowH=+new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Vientiane',hour:'2-digit',hour12:false}).format(new Date());
   const hrs=[...d.weather[0].hourly.map(h=>({...h,day:0})),...(d.weather[1]?d.weather[1].hourly.map(h=>({...h,day:1})):[])].filter(h=>h.day===1||(+h.time/100)>=nowH-1).slice(0,6);
   let maxRain=0;
-  $('#wxHours').innerHTML=hrs.map(h=>{const pr=+h.chanceofrain;maxRain=Math.max(maxRain,pr);const ww=WMO[wttrCode(h.weatherCode)]||['',''];return `<div class="wx-h">${h.day?'내일 ':''}${String(+h.time/100).padStart(2,'0')}시<b>${h.tempC}°</b>${ww[1]}<div class="rain">${pr}%</div></div>`}).join('');
+  $('#wxHours').innerHTML=hrs.map(h=>{const pr=+h.chanceofrain;maxRain=Math.max(maxRain,pr);const ww=WMO[wttrCode(h.weatherCode)]||['',''];return `<div class="wx-h">${h.day?'내일 ':''}${String(+h.time/100).padStart(2,'0')}시<b>${+h.tempC}°</b>${ww[1]}<div class="rain">${pr}%</div></div>`}).join('');
   tipFor(maxRain,+c.uvIndex,+c.FeelsLikeC);
 }
 function tipFor(maxRain,uv,feels){
