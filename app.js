@@ -217,7 +217,7 @@ function ensureMap(){
 }
 function pinIcon(p){
   const pk=isPick(p.id);
-  return L.divIcon({className:'', html:`<div class="pin ${p.type}${p.pick?' pp':''}${pk?' pk':''}"><span>${pk?'★':p.pick?'P'+p.rank:p.rank}</span></div>`, iconSize:[30,30], iconAnchor:[15,30]});
+  return L.divIcon({className:'', html:`<div class="pin ${p.type}${p.pick?' pp':''}${pk?' pk':''}"><span>${pk?'★':p.pick?(p.type==='c'?'C':'P')+p.rank:p.rank}</span></div>`, iconSize:[30,30], iconAnchor:[15,30]});
 }
 function repaintPins(){
   if(!state.map) return;
