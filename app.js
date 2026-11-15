@@ -213,9 +213,9 @@ function ensureMap(){
   L.control.zoom({position:'bottomright'}).addTo(m);
   /* 지도 그림(타일): 한 곳이 막히면 다음 곳으로 바꿈 */
   const TILES=[
-    ['https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{subdomains:'abcd',attribution:'© OpenStreetMap · © CARTO'}],
-    ['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}],
-    ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{attribution:'© Esri · OpenStreetMap'}]];
+    /* CARTO는 2026-11 이후 키 없으면 "API KEY REQUIRED" 그림을 정상 응답으로 보내서 뺌 */
+    ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{attribution:'Tiles © Esri — Esri, HERE, Garmin, © OpenStreetMap'}],
+    ['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}]];
   let ti=0, ok=0, bad=0, layer;
   const useTiles=()=>{ if(layer) m.removeLayer(layer); ok=0; bad=0;
     layer=L.tileLayer(TILES[ti][0],{maxZoom:19,...TILES[ti][1]}).addTo(m);
