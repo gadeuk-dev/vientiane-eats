@@ -1,4 +1,4 @@
-/* 비엔티안 식당 20 · 카페 20 — 구글 지도 평점·리뷰 수 2026-11-15 기준
+/* 비엔티안 식당 18 + 주인장 픽 5 · 카페 19 — 구글 지도 평점·리뷰 수 2026-11-15 기준
    추천 이유는 구글 리뷰에서 자주 언급되는 키워드와 리뷰 내용을 바탕으로 정리 */
 window.PLACES = [
 /* ───────── 주인장 픽 (직접 고른 5곳, 평점 순위와 별개로 맨 위에 표시) ───────── */
@@ -158,23 +158,19 @@ window.PLACES = [
  oneLine:'메콩강변 디자인 스튜디오 카페. 팬케이크 브런치.',
  reasons:['메콩강변 파응움 거리, 디자인 스튜디오와 함께 쓰는 감각적인 공간','팬케이크와 아보카도 토스트, 라떼 인기','대기가 있을 수 있지만 강변 산책과 묶기 좋아요'],
  tags:['강변','팬케이크','디자인']},
-{id:'c16',type:'c',rank:16,group:'베이커리·브런치',name:'Coco&Co.',cat:'채식 카페',rating:4.5,count:439,price:'1인 ₭5~25만',lat:17.9645269,lng:102.6069788,addr:'Rue Setthathilath, Vientiane',hours:'오후 5시까지',
- oneLine:'건강한 채식 카페. 스무디와 귀리우유 라떼.',
- reasons:['평점 4.5, 채식·글루텐 프리 메뉴가 탄탄','스무디, 귀리우유(오트) 라떼 인기','시내 한가운데라 동선에 넣기 쉬움'],
- tags:['채식','스무디','오트 라떼']},
-{id:'c17',type:'c',rank:17,group:'분위기',name:'Under The Tree',cat:'디저트 카페',rating:4.4,count:128,price:'1인 ₭5~10만',lat:17.9589085,lng:102.6141527,hours:'오후 5:30까지',
+{id:'c17',type:'c',rank:16,group:'분위기',name:'Under The Tree',cat:'디저트 카페',rating:4.4,count:128,price:'1인 ₭5~10만',lat:17.9589085,lng:102.6141527,hours:'오후 5:30까지',
  oneLine:'큰 나무 아래 디저트 카페. 인테리어가 예뻐요.',
  reasons:['디저트가 맛있다는 리뷰가 가장 많아요','인테리어와 분위기가 창의적이라는 평','더운 오후에 달달한 것 먹으며 쉬기 좋아요'],
  tags:['디저트','인테리어']},
-{id:'c18',type:'c',rank:18,group:'커피',name:'Lao Kham Coffee',cat:'라오 커피',rating:4.4,count:176,price:'',lat:17.9668978,lng:102.6054493,
+{id:'c18',type:'c',rank:17,group:'커피',name:'Lao Kham Coffee',cat:'라오 커피',rating:4.4,count:176,price:'',lat:17.9668978,lng:102.6054493,
  oneLine:'라오스산 원두로 내린 커피. 시내 중심.',
  reasons:['평점 4.4, 라오스 원두 커피를 부담 없이','관광 중심가에 있어 지나가다 들르기 편함','달달한 라오식 연유 커피도 도전해 보세요'],
  tags:['라오 커피','연유 커피']},
-{id:'c19',type:'c',rank:19,group:'베이커리·브런치',name:'Joma Bakery Cafe (That Luang)',cat:'베이커리 카페',rating:4.3,count:649,price:'1인 ₭5~10만',lat:17.9748016,lng:102.6310198,addr:'Nongbone Road, Vientiane',hours:'오후 9시까지',
+{id:'c19',type:'c',rank:18,group:'베이커리·브런치',name:'Joma Bakery Cafe (That Luang)',cat:'베이커리 카페',rating:4.3,count:649,price:'1인 ₭5~10만',lat:17.9748016,lng:102.6310198,addr:'Nongbone Road, Vientiane',hours:'오후 9시까지',
  oneLine:'비엔티안 대표 베이커리 체인. 탓루앙 가는 길에.',
  reasons:['리뷰 650개, 오래된 비엔티안 대표 베이커리 카페','페이스트리·샐러드, 넓은 좌석과 에어컨','탓루앙(황금 사원) 가는 길이라 관광 동선에 딱'],
  tags:['베이커리','에어컨','와이파이']},
-{id:'c20',type:'c',rank:20,group:'베이커리·브런치',name:'Adesso Cafe & Bakery',cat:'카페·베이커리',rating:4.3,count:179,price:'',lat:17.9685253,lng:102.6213662,
+{id:'c20',type:'c',rank:19,group:'베이커리·브런치',name:'Adesso Cafe & Bakery',cat:'카페·베이커리',rating:4.3,count:179,price:'',lat:17.9685253,lng:102.6213662,
  oneLine:'빵과 커피가 고루 괜찮은 동네 베이커리 카페.',
  reasons:['평점 4.3, 리뷰 180여 개','빵과 커피를 함께 즐기기 좋은 베이커리 카페','관광지에서 살짝 벗어나 붐비지 않아요'],
  tags:['베이커리','커피']}
