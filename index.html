@@ -255,6 +255,8 @@ a{color:inherit}
 <div class="toast" id="toast" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>/* 새 버전이 올라왔는데 휴대폰이 옛 화면을 들고 있으면 한 번 새로 불러옴 */
+(function(){var V='51';fetch('version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(s){s=(s||'').trim();if(s&&s!==V){var u=new URL(location.href);if(u.searchParams.get('v')!==s){u.searchParams.set('v',s);location.replace(u.toString());}}}).catch(function(){});})();</script>
 <script src="data.js?v=8"></script>
 <script src="app.js?v=6"></script>
 </body>
