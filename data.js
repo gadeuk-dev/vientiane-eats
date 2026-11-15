@@ -1,6 +1,28 @@
 /* 비엔티안 식당 20 · 카페 20 — 구글 지도 평점·리뷰 수 2026-11-15 기준
    추천 이유는 구글 리뷰에서 자주 언급되는 키워드와 리뷰 내용을 바탕으로 정리 */
 window.PLACES = [
+/* ───────── 주인장 픽 (직접 고른 5곳, 평점 순위와 별개로 맨 위에 표시) ───────── */
+{id:'p01',type:'r',rank:1,pick:true,group:'국수',name:'Crab Rice Noodle Soup by Maetara',cat:'게살 국수',rating:4.6,count:38,price:'',lat:17.9760396,lng:102.6197921,addr:'Asean Road, Vientiane (XJG9+CR6)',
+ oneLine:'게살 듬뿍 카오삐약. "한국 칼국수 같다"는 리뷰가 나오는 집.',
+ reasons:['게살을 듬뿍 올린 카오삐약(라오식 쌀 칼국수)이 대표 메뉴','리뷰에 "칼국수 같다"는 말이 여러 번 — 한국 사람 입맛에 잘 맞아요','해장용으로 좋다는 평, 에어컨 있어 더운 날에도 편함'],
+ tags:['게살 국수','카오삐약','해장']},
+{id:'p02',type:'r',rank:2,pick:true,group:'국수',name:'An Pho',cat:'베트남 쌀국수',rating:4.3,count:74,price:'1인 ₭10~15만',lat:17.9571503,lng:102.627975,addr:'Phonsavanh Neua, Vientiane',hours:'오후 4시까지',
+ oneLine:'깔끔한 매장에서 먹는 소고기 쌀국수.',
+ reasons:['소고기 쌀국수(퍼)가 대표','리뷰에서 "깨끗하다"는 말이 가장 많이 나와요 — 에어컨·분위기도 좋음','직원이 친절하고 주스도 맛있다는 평. 점심 피크엔 붐벼요'],
+ tags:['소고기 쌀국수','깔끔','에어컨'],tip:'오후 4시에 닫아요. 점심에 가세요.'},
+{id:'p03',type:'r',rank:3,pick:true,group:'국수',name:'Phim Phone Noodle Shop',cat:'라오 국수',rating:4.5,count:114,price:'1인 ₭5~10만',lat:17.9640815,lng:102.6195615,addr:'Dongpalane Rd, Vientiane (XJ79+JRM)',hours:'오후 4:30까지',
+ oneLine:'쫄깃한 카오삐약과 돼지갈비 국수.',
+ reasons:['리뷰에 카오삐약(라오식 쌀 칼국수)이 가장 많이 나오는 국숫집','돼지갈비 국수, 오리 완탕 국수도 인기','면이 쫄깃하고 판단잎 향이 은은하다는 평'],
+ tags:['카오삐약','갈비 국수','완탕'],tip:'오후 4시 반에 닫아요.'},
+{id:'p04',type:'r',rank:4,pick:true,group:'국수',name:'222 Restaurant',cat:'라오 국수',rating:4.3,count:71,price:'',lat:17.9545891,lng:102.6262109,addr:'Vientiane (XJ3G+RFP)',hours:'오후 3시까지',
+ oneLine:'동네 사람들이 찾는 카오삐약·쌀국수 집.',
+ reasons:['쌀국수와 카오삐약이 대표 — 리뷰 대부분이 국수 이야기','국물 맛과 면 굵기를 칭찬하는 리뷰가 많아요','고수 넣은 현지식 그대로. 아침·점심 장사'],
+ tags:['쌀국수','카오삐약','현지 식당'],tip:'오후 3시에 닫아요.'},
+{id:'p05',type:'r',rank:5,pick:true,group:'국수',name:'Pho Zap (포잡)',cat:'베트남 쌀국수',rating:4.2,count:992,price:'1인 ₭5~10만',lat:17.971882,lng:102.612431,addr:'Vientiane (XJC6+QX)',hours:'오후 3:30까지',
+ oneLine:'"1958년부터" 간판의 비엔티안 쌀국수 노포.',
+ reasons:['리뷰 990개가 넘는 비엔티안 대표 쌀국수집 — 간판에 "1958년부터"','소고기 쌀국수에 튀긴 스프링롤과 찍어 먹는 소스가 명물','좌석이 많고 야외 자리도 있어 여럿이 가기 좋아요'],
+ tags:['소고기 쌀국수','스프링롤','노포'],tip:'오후 3시 반에 닫아요.'},
+
 /* ───────── 식당 ───────── */
 {id:'r01',type:'r',rank:1,group:'아시아',name:'My Kitchen Indian Authentic Food',cat:'인도 요리',rating:4.9,count:541,price:'1인 ₭10~15만',lat:17.9566899,lng:102.6159149,
  oneLine:'리뷰 500개 넘게 평점 4.9. 이 리스트 식당 중 평점 1위.',

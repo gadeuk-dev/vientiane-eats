@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#14302e">
-<title>비엔티안 맛집 40</title>
+<title>비엔티안 맛집 45</title>
 <meta name="description" content="구글 평점 기준 라오스 비엔티안 식당 20곳 · 카페 20곳. 지도, 내 위치에서 거리·택시비·소요시간, 실시간 날씨.">
-<meta property="og:title" content="비엔티안 맛집 40 — 식당 20 · 카페 20">
+<meta property="og:title" content="비엔티안 맛집 45 — 주인장 픽 5 · 식당 20 · 카페 20">
 <meta property="og:description" content="구글 평점 기준으로 고른 비엔티안 식당·카페. 내 위치에서 거리·택시비·시간까지.">
 <meta property="og:image" content="photos/c01.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,6 +88,9 @@ a{color:inherit}
 .ph img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
 .ph .ph-fallback{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.75);font:400 34px var(--f-display)}
 .rank,.dist{z-index:2}
+.rank.pick{background:var(--saffron);color:#1b1206}
+.chip-own{border-color:var(--saffron)}
+.chip-own[aria-pressed="true"]{background:var(--saffron);border-color:var(--saffron);color:#1b1206}
 .rank{position:absolute;left:10px;top:10px;background:rgba(10,20,19,.78);color:#fff;font:600 13px var(--f-num);border-radius:8px;padding:4px 8px;backdrop-filter:blur(4px)}
 .dist{position:absolute;right:10px;bottom:10px;background:var(--saffron);color:#1b1206;font:600 12.5px var(--f-body);border-radius:999px;padding:4px 10px}
 .card-b{padding:12px 14px 14px;display:grid;gap:4px;min-width:0}
@@ -135,7 +138,7 @@ a{color:inherit}
 .map-top .chip{box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
 .pin span{transform:rotate(45deg);font:700 12px var(--f-num);color:#fff}
-.pin.r{background:#c2551f}.pin.c{background:#22504b}
+.pin.r{background:#c2551f}.pin.pp{background:var(--saffron)}.pin.pp span{font-size:11px}.pin.c{background:#22504b}
 .me-dot{width:16px;height:16px;border-radius:50%;background:#1a73e8;border:3px solid #fff;box-shadow:0 0 0 6px rgba(26,115,232,.25)}
 .leaflet-container{font:inherit;background:#dfe6e3}
 
@@ -190,8 +193,8 @@ a{color:inherit}
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Vientiane · Lao PDR</div>
-    <h1>비엔티안 맛집 <em>40</em></h1>
-    <p class="sub">구글 평점으로 고른 식당 20곳 · 카페 20곳. 누르면 내 위치에서 거리·택시비·시간이 나옵니다.</p>
+    <h1>비엔티안 맛집 <em>45</em></h1>
+    <p class="sub">주인장 픽 국숫집 5곳 + 구글 평점으로 고른 식당 20곳 · 카페 20곳. 누르면 내 위치에서 거리·택시비·시간이 나옵니다.</p>
     <div class="wx" id="wx" aria-live="polite">
       <div class="wx-temp" id="wxTemp">--°</div>
       <div class="wx-desc" id="wxDesc">비엔티안 날씨 불러오는 중…</div>
@@ -218,11 +221,11 @@ a{color:inherit}
 
 <main class="wrap" id="listView">
   <div class="starbar" id="starBar" aria-live="polite"></div>
-  <div class="section-h"><h2 id="secTitle">식당 20</h2><span id="secNote">구글 평점 · 리뷰 수 반영</span></div>
+  <div class="section-h"><h2 id="secTitle">식당 25</h2><span id="secNote">구글 평점 · 리뷰 수 반영</span></div>
   <div class="filters" id="filters" role="group" aria-label="종류"></div>
   <div class="list" id="list"></div>
   <p class="foot">
-    고른 기준: 구글 지도 평점 4.3 이상이면서 리뷰가 충분히 쌓인 곳(대부분 100개 이상)을 평점과 리뷰 수를 함께 따져 순위를 매겼습니다. 평점·리뷰 수는 2026년 11월 15일 구글 지도 기준이고, 바뀔 수 있어요.<br>
+    주인장 픽 5곳은 사이트 만든 사람이 직접 고른 곳이라 평점 순위와 별개로 맨 위에 둡니다. 나머지 고른 기준: 구글 지도 평점 4.3 이상이면서 리뷰가 충분히 쌓인 곳(대부분 100개 이상)을 평점과 리뷰 수를 함께 따져 순위를 매겼습니다. 평점·리뷰 수는 2026년 11월 15일 구글 지도 기준이고, 바뀔 수 있어요.<br>
     택시비는 앱 택시(LOCA·인드라이브 등) 기준 대략값입니다. 실제 요금은 시간대·차종·교통에 따라 다릅니다. 날씨: Open-Meteo. 지도: OpenStreetMap·CARTO. 사진: 구글 지도 장소 사진.
   </p>
 </main>
@@ -242,7 +245,7 @@ a{color:inherit}
 <nav class="tabbar" aria-label="보기 전환">
   <div class="in" role="tablist">
     <button class="tab" role="tab" data-tab="r" aria-selected="true" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v5M9 3v5M17 21V3c-2 1-3 4-3 7s1 4 3 4"/></svg>식당 20</button>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v5M9 3v5M17 21V3c-2 1-3 4-3 7s1 4 3 4"/></svg>식당 25</button>
     <button class="tab" role="tab" data-tab="c" aria-selected="false" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6V9zM17 11h1.5a2.5 2.5 0 0 1 0 5H17M8 3c0 1.5 1 1.5 1 3M12 3c0 1.5 1 1.5 1 3"/></svg>카페 20</button>
     <button class="tab" role="tab" data-tab="m" aria-selected="false" type="button">
@@ -252,7 +255,7 @@ a{color:inherit}
 <div class="toast" id="toast" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="data.js?v=3"></script>
-<script src="app.js?v=3"></script>
+<script src="data.js?v=4"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>

@@ -7,7 +7,8 @@ const FARE_BASE = 20000, FARE_KM = 9000;
 const KIP_PER_KRW = 15.4; // 1원 ≈ 15.4킵 (대략)
 const $ = s => document.querySelector(s);
 const state = { tab:'r', filter:'전체', sort:'rank', me:null, map:null, markers:{}, meMarker:null, mapF:'all' };
-const STAR = '★ 별표';
+const STAR = '★ 별표', PICKF = '주인장 픽';
+const label = p => p.pick ? '주인장 픽 '+p.rank : (p.type==='r'?'식당 ':'카페 ')+String(p.rank).padStart(2,'0');
 
 /* ---------- 별표 (내 기기에 저장) + 추천 링크 (?picks=) ---------- */
 const VALID = new Set(P.map(p=>p.id));
@@ -67,9 +68,10 @@ const mins = m => m>=60 ? Math.floor(m/60)+'시간 '+(m%60)+'분' : m+'분';
 function items(){
   let a = P.filter(p => p.type===state.tab);
   if(state.filter===STAR) a = a.filter(p => isPick(p.id));
+  else if(state.filter===PICKF) a = a.filter(p => p.pick);
   else if(state.filter!=='전체') a = a.filter(p => p.group===state.filter);
   if(state.sort==='near' && state.me) a = a.slice().sort((x,y)=>hav(state.me,[x.lat,x.lng])-hav(state.me,[y.lat,y.lng]));
-  else a = a.slice().sort((x,y)=>x.rank-y.rank);
+  else a = a.slice().sort((x,y)=>((x.pick?0:1)-(y.pick?0:1))||x.rank-y.rank);
   return a;
 }
 function photo(p, eager){
@@ -79,9 +81,10 @@ function photo(p, eager){
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function renderFilters(){
   const nPick = P.filter(p=>p.type===state.tab && isPick(p.id)).length;
-  const groups = ['전체', ...(nPick?[STAR]:[]), ...new Set(P.filter(p=>p.type===state.tab).map(p=>p.group))];
+  const nOwn = P.filter(p=>p.type===state.tab && p.pick).length;
+  const groups = ['전체', ...(nOwn?[PICKF]:[]), ...(nPick?[STAR]:[]), ...new Set(P.filter(p=>p.type===state.tab && !p.pick).map(p=>p.group))];
   if(state.filter===STAR && !nPick) state.filter='전체';
-  const html = groups.map(g=>`<button class="chip${g===STAR?' chip-star':''}" type="button" aria-pressed="${g===state.filter}" data-g="${esc(g)}">${esc(g===STAR?STAR+' '+nPick:g)}</button>`).join('');
+  const html = groups.map(g=>`<button class="chip${g===STAR?' chip-star':g===PICKF?' chip-own':''}" type="button" aria-pressed="${g===state.filter}" data-g="${esc(g)}">${esc(g===STAR?STAR+' '+nPick:g===PICKF?PICKF+' '+nOwn:g)}</button>`).join('');
   $('#filters').innerHTML = html;
 }
 function renderList(){
@@ -92,7 +95,7 @@ function renderList(){
     const t = trip(p); const mine = stars.has(p.id), fr = shared.has(p.id);
     const badge = mine ? '<span class="pick-badge">★ 내 추천</span>' : fr ? '<span class="pick-badge fr">친구 추천</span>' : '';
     return `<div class="cardw${mine||fr?' picked':''}"><button class="card" type="button" data-id="${p.id}">
-      ${photo(p, i<2)}<span class="rank">${state.tab==='r'?'식당':'카페'} ${String(p.rank).padStart(2,'0')}</span>${badge}${t?`<span class="dist">${km(t.road)} · 택시 ${mins(t.carMin)}</span>`:''}</div>
+      ${photo(p, i<2)}<span class="rank${p.pick?' pick':''}">${label(p)}</span>${badge}${t?`<span class="dist">${km(t.road)} · 택시 ${mins(t.carMin)}</span>`:''}</div>
       <div class="card-b">
         <div class="card-t"><h3>${esc(p.name)}</h3><span class="stars">★ ${p.rating.toFixed(1)} <small>(${kip(p.count)})</small></span></div>
         <div class="meta">${esc(p.cat)}${p.price?' · '+esc(p.price):''}${p.area?' · '+esc(p.area):''}</div>
@@ -126,7 +129,7 @@ function openSheet(id){
     ${photo(p, true)}</div>
     <div class="sh-b">
       <div>
-        <div class="eyebrow" style="color:var(--saffron)">${p.type==='r'?'식당':'카페'} ${String(p.rank).padStart(2,'0')} · ${esc(p.cat)}</div>
+        <div class="eyebrow" style="color:var(--saffron)">${label(p)} · ${esc(p.cat)}</div>
         <h2 id="shName" style="margin-top:6px">${esc(p.name)}</h2>
         <div class="sh-sub"><span class="stars">★ ${p.rating.toFixed(1)}</span> 구글 리뷰 ${kip(p.count)}개${p.price?' · '+esc(p.price):''}</div>
         ${shared.has(p.id)?`<div class="sh-friend">${sharedFrom?esc(sharedFrom)+'님':'친구'}이 추천한 곳이에요</div>`:''}
@@ -214,7 +217,7 @@ function ensureMap(){
 }
 function pinIcon(p){
   const pk=isPick(p.id);
-  return L.divIcon({className:'', html:`<div class="pin ${p.type}${pk?' pk':''}"><span>${pk?'★':p.rank}</span></div>`, iconSize:[30,30], iconAnchor:[15,30]});
+  return L.divIcon({className:'', html:`<div class="pin ${p.type}${p.pick?' pp':''}${pk?' pk':''}"><span>${pk?'★':p.pick?'P'+p.rank:p.rank}</span></div>`, iconSize:[30,30], iconAnchor:[15,30]});
 }
 function repaintPins(){
   if(!state.map) return;
@@ -224,11 +227,11 @@ function repaintPins(){
 function renderMapFilters(){
   const n=P.filter(p=>isPick(p.id)).length;
   if(state.mapF==='star' && !n) state.mapF='all';
-  $('#mapFilters').innerHTML = [['all','전체 40'],['r','식당만'],['c','카페만'],...(n?[['star','★ 별표 '+n]]:[])].map(([k,l])=>`<button class="chip${k==='star'?' chip-star':''}" type="button" data-mf="${k}" aria-pressed="${k===state.mapF}">${l}</button>`).join('') + `<button class="chip" type="button" data-act="loc">내 위치</button>`;
+  $('#mapFilters').innerHTML = [['all','전체 '+P.length],['own','주인장 픽'],['r','식당만'],['c','카페만'],...(n?[['star','★ 별표 '+n]]:[])].map(([k,l])=>`<button class="chip${k==='star'?' chip-star':''}" type="button" data-mf="${k}" aria-pressed="${k===state.mapF}">${l}</button>`).join('') + `<button class="chip" type="button" data-act="loc">내 위치</button>`;
 }
 function mapFilter(k){
   state.mapF=k;
-  P.forEach(p=>{ const mk=state.markers[p.id]; const show = k==='all'||(k==='star'?isPick(p.id):p.type===k); if(show) mk.addTo(state.map); else mk.remove(); });
+  P.forEach(p=>{ const mk=state.markers[p.id]; const show = k==='all'||(k==='star'?isPick(p.id):k==='own'?!!p.pick:p.type===k); if(show) mk.addTo(state.map); else mk.remove(); });
   document.querySelectorAll('[data-mf]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.mf===k));
 }
 function drawMe(){
