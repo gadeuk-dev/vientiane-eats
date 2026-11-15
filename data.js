@@ -1,4 +1,4 @@
-/* 비엔티안 식당 18 + 주인장 픽 10 · 카페 17 + 주인장 픽 카페 6 — 구글 지도 평점·리뷰 수 2026-11-15 기준
+/* 비엔티안 식당 18 + 주인장 픽 10 · 카페 16 + 주인장 픽 카페 7 — 구글 지도 평점·리뷰 수 2026-11-15 기준
    추천 이유는 구글 리뷰에서 자주 언급되는 키워드와 리뷰 내용을 바탕으로 정리 */
 window.PLACES = [
 /* ───────── 주인장 픽 (직접 고른 10곳, 평점 순위와 별개로 맨 위에 표시) ───────── */
@@ -44,7 +44,7 @@ window.PLACES = [
  reasons:['리뷰 2,500개 넘는 비엔티안 터줏대감 — 1998년 문 연 곳','라오·수입 맥주 종류가 많아 저녁에 한잔하기 좋아요','라오·태국·서양 메뉴가 다 있어 일행 입맛 맞추기 쉬움, 채식 메뉴도 있음'],
  tags:['맥주','다국적 메뉴','남푸 분수']},
 
-/* ───────── 주인장 픽 카페 (직접 고른 6곳, 카페 탭 맨 위) ───────── */
+/* ───────── 주인장 픽 카페 (직접 고른 7곳, 카페 탭 맨 위) ───────── */
 {id:'p11',type:'c',rank:1,pick:true,group:'분위기',name:'MICASA Cafe',cat:'카페',rating:4.6,count:52,price:'',lat:17.9657234,lng:102.5969399,addr:'Vientiane (XH8W+8RW)',
  oneLine:'조용하고 아늑한, 일하기 좋은 동네 카페.',
  reasons:['커피와 케이크가 맛있고 직원이 친절하다는 평','자리마다 콘센트, 와이파이 안정적 — 노트북 작업·공부하기 좋아요','인테리어가 예쁘고 조용, 화장실도 깨끗. 라오 스타일 커피가 맛있다는 리뷰'],
@@ -69,6 +69,10 @@ window.PLACES = [
  oneLine:'토끼·거북이 먹이 주며 아이들이 뛰노는 넓은 정원 카페.',
  reasons:['넓은 마당과 놀이터, 토끼·거북이·양 등 동물이 있어 아이 동반 가족에게 인기','실내·야외 자리가 다양해 주말 아침 느긋하게 보내기 좋아요','커피 맛 무난, 식사 메뉴도 있음'],
  tags:['아이 동반','동물 먹이주기','정원'],tip:'시내에서 남동쪽으로 꽤 떨어져 있어요(택시 추천).'},
+{id:'c12',type:'c',rank:7,pick:true,group:'분위기',name:'Hichillico Café',cat:'정원 카페',rating:4.5,count:345,price:'1인 ₭5~10만',lat:17.9655625,lng:102.6111719,hours:'오후 5시까지',
+ oneLine:'빈티지 정원 카페. 사진 찍기 좋은 곳.',
+ reasons:['리뷰에 "사진", "정원", "빈티지"가 가장 많이 나와요','크루아상 등 베이커리도 맛있다는 평','인생샷 남기기 좋은 비엔티안 감성 카페'],
+ tags:['정원','빈티지','포토 스폿']},
 
 /* ───────── 식당 ───────── */
 {id:'r01',type:'r',rank:1,group:'아시아',name:'My Kitchen Indian Authentic Food',cat:'인도 요리',rating:4.9,count:541,price:'1인 ₭10~15만',lat:17.9566899,lng:102.6159149,
@@ -189,27 +193,23 @@ window.PLACES = [
  oneLine:'파니니·샌드위치가 맛있는 감성 인테리어 카페.',
  reasons:['파니니와 샌드위치 평이 특히 좋아요','인테리어가 예쁘고 와이파이 좋음','오후 4시에 닫으니 점심 무렵 방문 추천'],
  tags:['파니니','인테리어']},
-{id:'c12',type:'c',rank:12,group:'분위기',name:'Hichillico Café',cat:'정원 카페',rating:4.5,count:345,price:'1인 ₭5~10만',lat:17.9655625,lng:102.6111719,hours:'오후 5시까지',
- oneLine:'빈티지 정원 카페. 사진 찍기 좋은 곳.',
- reasons:['리뷰에 "사진", "정원", "빈티지"가 가장 많이 나와요','크루아상 등 베이커리도 맛있다는 평','인생샷 남기기 좋은 비엔티안 감성 카페'],
- tags:['정원','빈티지','포토 스폿']},
-{id:'c13',type:'c',rank:13,group:'분위기',name:'The Little House',cat:'정원 카페',rating:4.5,count:179,price:'1인 ₭5~10만',lat:17.9583113,lng:102.6165112,hours:'오후 6시까지',
+{id:'c13',type:'c',rank:12,group:'분위기',name:'The Little House',cat:'정원 카페',rating:4.5,count:179,price:'1인 ₭5~10만',lat:17.9583113,lng:102.6165112,hours:'오후 6시까지',
  oneLine:'정원 속 작은 집. 케이크·스콘과 직접 볶은 커피.',
  reasons:['초록 정원 안의 작은 집 카페','케이크와 스콘 평이 좋고 원두를 직접 로스팅','주말엔 대기가 생길 만큼 인기'],
  tags:['정원','케이크','스콘']},
-{id:'c17',type:'c',rank:14,group:'분위기',name:'Under The Tree',cat:'디저트 카페',rating:4.4,count:128,price:'1인 ₭5~10만',lat:17.9589085,lng:102.6141527,hours:'오후 5:30까지',
+{id:'c17',type:'c',rank:13,group:'분위기',name:'Under The Tree',cat:'디저트 카페',rating:4.4,count:128,price:'1인 ₭5~10만',lat:17.9589085,lng:102.6141527,hours:'오후 5:30까지',
  oneLine:'큰 나무 아래 디저트 카페. 인테리어가 예뻐요.',
  reasons:['디저트가 맛있다는 리뷰가 가장 많아요','인테리어와 분위기가 창의적이라는 평','더운 오후에 달달한 것 먹으며 쉬기 좋아요'],
  tags:['디저트','인테리어']},
-{id:'c18',type:'c',rank:15,group:'커피',name:'Lao Kham Coffee',cat:'라오 커피',rating:4.4,count:176,price:'',lat:17.9668978,lng:102.6054493,
+{id:'c18',type:'c',rank:14,group:'커피',name:'Lao Kham Coffee',cat:'라오 커피',rating:4.4,count:176,price:'',lat:17.9668978,lng:102.6054493,
  oneLine:'라오스산 원두로 내린 커피. 시내 중심.',
  reasons:['평점 4.4, 라오스 원두 커피를 부담 없이','관광 중심가에 있어 지나가다 들르기 편함','달달한 라오식 연유 커피도 도전해 보세요'],
  tags:['라오 커피','연유 커피']},
-{id:'c19',type:'c',rank:16,group:'베이커리·브런치',name:'Joma Bakery Cafe (That Luang)',cat:'베이커리 카페',rating:4.3,count:649,price:'1인 ₭5~10만',lat:17.9748016,lng:102.6310198,addr:'Nongbone Road, Vientiane',hours:'오후 9시까지',
+{id:'c19',type:'c',rank:15,group:'베이커리·브런치',name:'Joma Bakery Cafe (That Luang)',cat:'베이커리 카페',rating:4.3,count:649,price:'1인 ₭5~10만',lat:17.9748016,lng:102.6310198,addr:'Nongbone Road, Vientiane',hours:'오후 9시까지',
  oneLine:'비엔티안 대표 베이커리 체인. 탓루앙 가는 길에.',
  reasons:['리뷰 650개, 오래된 비엔티안 대표 베이커리 카페','페이스트리·샐러드, 넓은 좌석과 에어컨','탓루앙(황금 사원) 가는 길이라 관광 동선에 딱'],
  tags:['베이커리','에어컨','와이파이']},
-{id:'c20',type:'c',rank:17,group:'베이커리·브런치',name:'Adesso Cafe & Bakery',cat:'카페·베이커리',rating:4.3,count:179,price:'',lat:17.9685253,lng:102.6213662,
+{id:'c20',type:'c',rank:16,group:'베이커리·브런치',name:'Adesso Cafe & Bakery',cat:'카페·베이커리',rating:4.3,count:179,price:'',lat:17.9685253,lng:102.6213662,
  oneLine:'빵과 커피가 고루 괜찮은 동네 베이커리 카페.',
  reasons:['평점 4.3, 리뷰 180여 개','빵과 커피를 함께 즐기기 좋은 베이커리 카페','관광지에서 살짝 벗어나 붐비지 않아요'],
  tags:['베이커리','커피']}
