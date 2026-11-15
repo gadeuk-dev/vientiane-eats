@@ -304,7 +304,7 @@ async function weather(){
     $('#wxTemp').textContent = Math.round(c.temperature_2m)+'°';
     $('#wxDesc').textContent = `${w[1]} ${w[0]} · 체감 ${Math.round(c.apparent_temperature)}°`;
     const ss = d.daily.sunset[0].slice(11,16);
-    $('#wxMeta').innerHTML = `현지 <span id="clock"></span> · 습도 ${c.relative_humidity_2m}% · 최고 ${Math.round(d.daily.temperature_2m_max[0])}° / 최저 ${Math.round(d.daily.temperature_2m_min[0])}° · 일몰 ${ss}`;
+    $('#wxMeta').innerHTML = `현지 <span id="clock"></span> · 습도 ${+c.relative_humidity_2m}% · 최고 ${Math.round(d.daily.temperature_2m_max[0])}° / 최저 ${Math.round(d.daily.temperature_2m_min[0])}° · 일몰 ${esc(ss)}`;
     tick();
     const now = c.time.slice(0,13);
     let i = d.hourly.time.findIndex(t=>t.slice(0,13)===now); if(i<0) i=0;
@@ -312,7 +312,7 @@ async function weather(){
     for(let k=i;k<i+12&&k<d.hourly.time.length;k++){
       const pr=d.hourly.precipitation_probability[k]??0; if(k<i+6) maxRain=Math.max(maxRain,pr);
       const ww=WMO[d.hourly.weather_code[k]]||['',''];
-      html+=`<div class="wx-h">${k===i?'지금':d.hourly.time[k].slice(11,13)+'시'}<b>${Math.round(d.hourly.temperature_2m[k])}°</b>${ww[1]}<div class="rain">${pr}%</div></div>`;
+      html+=`<div class="wx-h">${k===i?'지금':esc(d.hourly.time[k].slice(11,13))+'시'}<b>${Math.round(d.hourly.temperature_2m[k])}°</b>${ww[1]}<div class="rain">${+pr}%</div></div>`;
     }
     $('#wxHours').innerHTML=html;
     tipFor(maxRain, c.uv_index??0, c.apparent_temperature);
