@@ -200,11 +200,29 @@ function closeSheet(){
 }
 
 /* ---------- 지도 ---------- */
+function mapFail(msg){
+  if($('#mapView .map-fail')) return;
+  const d=document.createElement('div'); d.className='map-fail';
+  d.innerHTML=esc(msg)+'<br><a href="https://www.google.com/maps/search/?api=1&query=Vientiane" target="_blank" rel="noopener">구글 지도 앱으로 열기</a><br><small>카톡에서 열었다면 오른쪽 위 메뉴 → "다른 브라우저로 열기"도 해 보세요.</small>';
+  $('#mapView').appendChild(d);
+}
 function ensureMap(){
-  if(state.map || !window.L) return;
+  if(state.map) return;
+  if(!window.L){ mapFail('지도 도구를 불러오지 못했어요(통신망에서 막혔을 수 있어요).'); return; }
   const m = L.map('map',{zoomControl:false, attributionControl:true}).setView(CENTER, 14);
   L.control.zoom({position:'bottomright'}).addTo(m);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19, subdomains:'abcd', attribution:'© OpenStreetMap · © CARTO'}).addTo(m);
+  /* 지도 그림(타일): 한 곳이 막히면 다음 곳으로 바꿈 */
+  const TILES=[
+    ['https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{subdomains:'abcd',attribution:'© OpenStreetMap · © CARTO'}],
+    ['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}],
+    ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{attribution:'© Esri · OpenStreetMap'}]];
+  let ti=0, ok=0, bad=0, layer;
+  const useTiles=()=>{ if(layer) m.removeLayer(layer); ok=0; bad=0;
+    layer=L.tileLayer(TILES[ti][0],{maxZoom:19,...TILES[ti][1]}).addTo(m);
+    layer.on('tileload',()=>{ok++; const f=$('#mapView .map-fail'); if(f) f.remove();});
+    layer.on('tileerror',()=>{ bad++; if(ok===0&&bad>=4){ if(ti<TILES.length-1){ti++;useTiles();} else mapFail('지도 그림을 불러오지 못했어요. 핀은 눌러서 볼 수 있어요.'); } });
+  };
+  useTiles();
   state.map = m;
   P.forEach(p=>{
     const mk = L.marker([p.lat,p.lng],{icon:pinIcon(p), title:p.name}).addTo(m);
