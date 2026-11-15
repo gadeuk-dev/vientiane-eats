@@ -70,7 +70,7 @@ function items(){
   if(state.filter===STAR) a = a.filter(p => isPick(p.id));
   else if(state.filter===PICKF) a = a.filter(p => p.pick);
   else if(state.filter!=='전체') a = a.filter(p => p.group===state.filter);
-  if(state.sort==='near' && state.me) a = a.slice().sort((x,y)=>hav(state.me,[x.lat,x.lng])-hav(state.me,[y.lat,y.lng]));
+  if(state.sort==='near' && state.me) a = a.slice().sort((x,y)=>((x.pick?0:1)-(y.pick?0:1))||hav(state.me,[x.lat,x.lng])-hav(state.me,[y.lat,y.lng]));
   else a = a.slice().sort((x,y)=>((x.pick?0:1)-(y.pick?0:1))||x.rank-y.rank);
   return a;
 }
