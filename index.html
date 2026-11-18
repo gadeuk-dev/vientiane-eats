@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#14302e">
-<title>비엔티안 맛집 51</title>
-<meta name="description" content="구글 평점 기준 라오스 비엔티안 식당 28곳 · 카페 23곳. 지도, 내 위치에서 거리·택시비·소요시간, 실시간 날씨.">
-<meta property="og:title" content="비엔티안 맛집 51 — 주인장 픽 17 · 식당 18 · 카페 16">
-<meta property="og:description" content="구글 평점 기준으로 고른 비엔티안 식당·카페. 내 위치에서 거리·택시비·시간까지.">
+<title>비엔티안 맛집 70</title>
+<meta name="description" content="구글 평점 기준 라오스 비엔티안 식당 28곳 · 카페 23곳 · 술집 19곳. 지도, 내 위치에서 거리·택시비·소요시간, 실시간 날씨.">
+<meta property="og:title" content="비엔티안 맛집 70 — 식당 28 · 카페 23 · 술집 19">
+<meta property="og:description" content="구글 평점 기준으로 고른 비엔티안 식당·카페·술집. 내 위치에서 거리·택시비·시간까지.">
 <meta property="og:image" content="photos/c01.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -140,7 +140,7 @@ a{color:inherit}
 .map-top .chip{box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
 .pin span{transform:rotate(45deg);font:700 12px var(--f-num);color:#fff}
-.pin.r{background:#c2551f}.pin.pp{background:var(--saffron)}.pin.pp span{font-size:11px}.pin.c{background:#22504b}
+.pin.r{background:#c2551f}.pin.pp{background:var(--saffron)}.pin.pp span{font-size:11px}.pin.c{background:#22504b}.pin.b{background:#5b3a8c}
 .me-dot{width:16px;height:16px;border-radius:50%;background:#1a73e8;border:3px solid #fff;box-shadow:0 0 0 6px rgba(26,115,232,.25)}
 .leaflet-container{font:inherit;background:#dfe6e3}
 
@@ -180,7 +180,7 @@ a{color:inherit}
 
 /* 탭바 */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:800;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-.tabbar .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);height:var(--tab-h)}
+.tabbar .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);height:var(--tab-h)}
 .tab{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;color:var(--muted);font-weight:600}
 .tab svg{width:24px;height:24px}
 .tab[aria-selected="true"]{color:var(--saffron)}
@@ -195,8 +195,8 @@ a{color:inherit}
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">Vientiane · Lao PDR</div>
-    <h1>비엔티안 맛집 <em>51</em></h1>
-    <p class="sub">주인장 픽 식당 10곳 · 카페 7곳 + 구글 평점으로 고른 식당 18곳 · 카페 16곳. 누르면 내 위치에서 거리·택시비·시간이 나옵니다.</p>
+    <h1>비엔티안 맛집 <em>70</em></h1>
+    <p class="sub">주인장 픽 식당 10곳 · 카페 7곳 + 구글 평점으로 고른 식당 18곳 · 카페 16곳 · 저녁 술집 19곳. 누르면 내 위치에서 거리·택시비·시간이 나옵니다.</p>
     <div class="wx" id="wx" aria-live="polite">
       <div class="wx-temp" id="wxTemp">--°</div>
       <div class="wx-desc" id="wxDesc">비엔티안 날씨 불러오는 중…</div>
@@ -227,8 +227,8 @@ a{color:inherit}
   <div class="filters" id="filters" role="group" aria-label="종류"></div>
   <div class="list" id="list"></div>
   <p class="foot">
-    주인장 픽(식당 10 · 카페 7)은 사이트 만든 사람이 직접 고른 곳이라 평점 순위와 별개로 맨 위에 둡니다. 나머지 고른 기준: 구글 지도 평점 4.3 이상이면서 리뷰가 충분히 쌓인 곳(대부분 100개 이상)을 평점과 리뷰 수를 함께 따져 순위를 매겼습니다. 평점·리뷰 수는 2026년 11월 15일 구글 지도 기준이고, 바뀔 수 있어요.<br>
-    택시비는 앱 택시(LOCA·인드라이브 등) 기준 대략값입니다. 실제 요금은 시간대·차종·교통에 따라 다릅니다. 날씨: Open-Meteo. 지도: OpenStreetMap·CARTO. 사진: 구글 지도 장소 사진.
+    주인장 픽(식당 10 · 카페 7)은 사이트 만든 사람이 직접 고른 곳이라 평점 순위와 별개로 맨 위에 둡니다. 나머지 고른 기준: 구글 지도 평점 4.3 이상이면서 리뷰가 충분히 쌓인 곳(대부분 100개 이상)을 평점과 리뷰 수를 함께 따져 순위를 매겼습니다. 평점·리뷰 수는 2026년 11월 15일(술집은 18일) 구글 지도 기준이고, 바뀔 수 있어요.<br>
+    택시비는 앱 택시(LOCA·인드라이브 등) 기준 대략값입니다. 실제 요금은 시간대·차종·교통에 따라 다릅니다. 날씨: Open-Meteo. 지도: Esri·OpenStreetMap. 사진: 구글 지도 장소 사진.
   </p>
 </main>
 
@@ -250,6 +250,8 @@ a{color:inherit}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v5M9 3v5M17 21V3c-2 1-3 4-3 7s1 4 3 4"/></svg>식당 28</button>
     <button class="tab" role="tab" data-tab="c" aria-selected="false" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6V9zM17 11h1.5a2.5 2.5 0 0 1 0 5H17M8 3c0 1.5 1 1.5 1 3M12 3c0 1.5 1 1.5 1 3"/></svg>카페 23</button>
+    <button class="tab" role="tab" data-tab="b" aria-selected="false" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h10v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8zM15 10h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2M5 8a3 3 0 0 1 2.5-4.5A3.5 3.5 0 0 1 13 4a2.5 2.5 0 0 1 2 4M9 12v5M12 12v5"/></svg>술집 19</button>
     <button class="tab" role="tab" data-tab="m" aria-selected="false" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg>지도</button>
   </div>
@@ -260,9 +262,9 @@ a{color:inherit}
 <script>/* 지도 도구가 한 곳에서 막히면 다른 곳에서 받기 */window.L||document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>')</script>
 <script>window.L||document.write('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>')</script>
 <script>/* 새 버전이 올라왔는데 휴대폰이 옛 화면을 들고 있으면 한 번 새로 불러옴 */
-(function(){var V='51h';fetch('version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(s){s=(s||'').trim();if(s&&s!==V){var u=new URL(location.href);if(u.searchParams.get('v')!==s){u.searchParams.set('v',s);location.replace(u.toString());}}}).catch(function(){});})();</script>
-<script src="data.js?v=10"></script>
-<script src="app.js?v=10"></script>
+(function(){var V='52';fetch('version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(s){s=(s||'').trim();if(s&&s!==V){var u=new URL(location.href);if(u.searchParams.get('v')!==s){u.searchParams.set('v',s);location.replace(u.toString());}}}).catch(function(){});})();</script>
+<script src="data.js?v=11"></script>
+<script src="app.js?v=11"></script>
 <!-- 방문자 집계(GoatCounter): 개인 식별 없음, 쿠키 없음. ?v= 꼬리표는 같은 페이지로 묶음 -->
 <script>window.goatcounter={path:function(){return location.pathname}};</script>
 <script data-goatcounter="https://vientiane-eats.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>

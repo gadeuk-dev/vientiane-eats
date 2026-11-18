@@ -8,7 +8,8 @@ const KIP_PER_KRW = 15.4; // 1원 ≈ 15.4킵 (대략)
 const $ = s => document.querySelector(s);
 const state = { tab:'r', filter:'전체', sort:'rank', me:null, map:null, markers:{}, meMarker:null, mapF:'all' };
 const STAR = '★ 별표', PICKF = '주인장 픽';
-const label = p => p.pick ? '주인장 픽 '+p.rank : (p.type==='r'?'식당 ':'카페 ')+String(p.rank).padStart(2,'0');
+const TN = {r:'식당',c:'카페',b:'술집'};
+const label = p => p.pick ? '주인장 픽 '+p.rank : TN[p.type]+' '+String(p.rank).padStart(2,'0');
 
 /* ---------- 별표 (내 기기에 저장) + 추천 링크 (?picks=) ---------- */
 const VALID = new Set(P.map(p=>p.id));
@@ -89,7 +90,7 @@ function renderFilters(){
 }
 function renderList(){
   const a = items();
-  $('#secTitle').textContent = (state.tab==='r'?'식당 ':'카페 ') + P.filter(p=>p.type===state.tab).length;
+  $('#secTitle').textContent = TN[state.tab]+' ' + P.filter(p=>p.type===state.tab).length;
   if(!a.length){ $('#list').innerHTML = `<p class="empty">아직 이 탭에 별표한 곳이 없어요. 사진 오른쪽 위 ☆를 눌러 보세요.</p>`; return; }
   $('#list').innerHTML = a.map((p,i)=>{
     const t = trip(p); const mine = stars.has(p.id), fr = shared.has(p.id);
@@ -166,7 +167,7 @@ function openShare(){
   $('#shBody').innerHTML = `<div class="sh-b" style="padding-top:28px">
     <div><div class="eyebrow" style="color:var(--saffron)">추천 링크 보내기</div><h2 id="shName" style="margin-top:6px">내 추천 ${list.length}곳</h2>
     <div class="sh-sub">링크를 받은 친구는 이 ${list.length}곳에 "친구 추천" 표시가 붙은 화면을 보게 돼요.</div></div>
-    <ul class="pick-list">${list.map(p=>`<li><span>${p.type==='r'?'식당':'카페'} · <b>${esc(p.name)}</b></span><button class="tag" type="button" data-star="${p.id}">빼기</button></li>`).join('')}</ul>
+    <ul class="pick-list">${list.map(p=>`<li><span>${TN[p.type]} · <b>${esc(p.name)}</b></span><button class="tag" type="button" data-star="${p.id}">빼기</button></li>`).join('')}</ul>
     <label class="field">보내는 사람 이름 (선택)<input id="fromName" type="text" maxlength="20" placeholder="예: 민수" value="${esc(name)}"></label>
     <div class="trip-cta"><button class="btn pri wide" type="button" data-act="doshare">카톡·메시지로 보내기</button>
     <button class="btn wide" type="button" data-act="copylink">링크만 복사</button></div>
@@ -245,7 +246,7 @@ function repaintPins(){
 function renderMapFilters(){
   const n=P.filter(p=>isPick(p.id)).length;
   if(state.mapF==='star' && !n) state.mapF='all';
-  $('#mapFilters').innerHTML = [['all','전체 '+P.length],['own','주인장 픽'],['r','식당만'],['c','카페만'],...(n?[['star','★ 별표 '+n]]:[])].map(([k,l])=>`<button class="chip${k==='star'?' chip-star':''}" type="button" data-mf="${k}" aria-pressed="${k===state.mapF}">${l}</button>`).join('') + `<button class="chip" type="button" data-act="loc">내 위치</button>`;
+  $('#mapFilters').innerHTML = [['all','전체 '+P.length],['own','주인장 픽'],['r','식당만'],['c','카페만'],['b','술집만'],...(n?[['star','★ 별표 '+n]]:[])].map(([k,l])=>`<button class="chip${k==='star'?' chip-star':''}" type="button" data-mf="${k}" aria-pressed="${k===state.mapF}">${l}</button>`).join('') + `<button class="chip" type="button" data-act="loc">내 위치</button>`;
 }
 function mapFilter(k){
   state.mapF=k;
@@ -351,7 +352,7 @@ document.addEventListener('click',e=>{
   if(act==='share'){ openShare(); return; }
   if(act==='doshare'){ doShare(); return; }
   if(act==='copylink'){ copyLink(); return; }
-  if(act==='showpicks'){ state.filter=STAR; if(!P.some(p=>p.type===state.tab&&isPick(p.id))) setTab(state.tab==='r'?'c':'r'); state.filter=STAR; renderFilters(); renderList(); $('#listView').scrollIntoView({behavior:'smooth'}); return; }
+  if(act==='showpicks'){ state.filter=STAR; if(!P.some(p=>p.type===state.tab&&isPick(p.id))){ const t=['r','c','b'].find(t=>P.some(p=>p.type===t&&isPick(p.id))); if(t) setTab(t); } state.filter=STAR; renderFilters(); renderList(); $('#listView').scrollIntoView({behavior:'smooth'}); return; }
   if(act==='adopt'){ shared.forEach(id=>stars.add(id)); saveStars(); refreshStars(); toast(`${shared.size}곳을 내 별표에 담았어요`); return; }
   const card=e.target.closest('.card'); if(card){ openSheet(card.dataset.id); return; }
   const tab=e.target.closest('.tab'); if(tab){ setTab(tab.dataset.tab); return; }
@@ -372,7 +373,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
   sh.addEventListener('touchend',e=>{ if(y0===null) return; const dy=e.changedTouches[0].clientY-y0; sh.style.transform=''; y0=null; if(dy>110) closeSheet(); });
 })();
 
-if(shared.size){ if(!P.some(p=>p.type==='r'&&shared.has(p.id))){ state.tab='c'; document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected', b.dataset.tab==='c')); } state.filter=STAR; }
+if(shared.size){ if(!P.some(p=>p.type==='r'&&shared.has(p.id))){ const st=P.some(p=>p.type==='c'&&shared.has(p.id))?'c':'b'; state.tab=st; document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected', b.dataset.tab===st)); } state.filter=STAR; }
 renderStarBar(); renderFilters(); renderList(); weather(); tick(); setInterval(tick, 30000);
 if(location.hash.length>1 && P.some(p=>p.id===location.hash.slice(1))) openSheet(location.hash.slice(1));
 })();
