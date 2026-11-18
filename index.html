@@ -260,8 +260,11 @@ a{color:inherit}
 <script>/* 지도 도구가 한 곳에서 막히면 다른 곳에서 받기 */window.L||document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>')</script>
 <script>window.L||document.write('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>')</script>
 <script>/* 새 버전이 올라왔는데 휴대폰이 옛 화면을 들고 있으면 한 번 새로 불러옴 */
-(function(){var V='51g';fetch('version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(s){s=(s||'').trim();if(s&&s!==V){var u=new URL(location.href);if(u.searchParams.get('v')!==s){u.searchParams.set('v',s);location.replace(u.toString());}}}).catch(function(){});})();</script>
+(function(){var V='51h';fetch('version.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(s){s=(s||'').trim();if(s&&s!==V){var u=new URL(location.href);if(u.searchParams.get('v')!==s){u.searchParams.set('v',s);location.replace(u.toString());}}}).catch(function(){});})();</script>
 <script src="data.js?v=10"></script>
 <script src="app.js?v=10"></script>
+<!-- 방문자 집계(GoatCounter): 개인 식별 없음, 쿠키 없음. ?v= 꼬리표는 같은 페이지로 묶음 -->
+<script>window.goatcounter={path:function(){return location.pathname}};</script>
+<script data-goatcounter="https://vientiane-eats.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
